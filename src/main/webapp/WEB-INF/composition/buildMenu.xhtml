@@ -1,0 +1,131 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition> 
+        <!--fullPage="true"-->
+
+        <p:layoutUnit id="center" position="center">
+
+            <p:panelGrid id="mainGrid" columnClasses="myPanelGridLeft myPanelGridRight" styleClass="myPGrid">
+                <p:row>
+                    <p:column rowspan="3" style="width: 300px">
+                        <p:fieldset id="availableDishesField" legend="Доступные блюда">
+                            <p:dataTable id="availableDishes" var="dish" value="#{builMenu.dishList}">
+                                <p:column style="width:20px">
+                                    <h:outputText id="dragIcon" value="SMT"/>
+                                    <p:draggable for="dragIcon" revert="true" helper="clone" snap="true" />
+                                </p:column>
+
+                                <p:column headerText="№" style="width: 2%">
+                                    <h:outputText title="#{builMenu.dishList.indexOf(dish) + 1}" value="#{builMenu.dishList.indexOf(dish) + 1}"/>
+                                </p:column>
+
+                                <p:column headerText="Блюдо">
+                                    <h:outputText title="#{dish.name}" value="#{dish.name}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:fieldset>
+                    </p:column>
+                    <p:column style="width: 300px">
+                        <p:fieldset id="breakfastDishes" legend="Завтрак" style="margin-top: 0">
+                            <p:outputPanel id="dropAreaB">
+                                <h:outputText value="!!!Drop here!!!" rendered="#{empty builMenu.breakfastDishList}" style="font-size:24px;" />
+                                <p:dataTable id="selectedBreakfastDishesTable" var="dish" value="#{builMenu.breakfastDishList}" rendered="#{not empty builMenu.breakfastDishList}">
+                                    <p:column headerText="№">
+                                        <h:outputText title="#{builMenu.breakfastDishList.indexOf(dish) + 1}" value="#{builMenu.breakfastDishList.indexOf(dish) + 1}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Блюдо">
+                                        <h:outputText title="#{dish.name}" value="#{dish.name}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </p:fieldset>
+                    </p:column>
+                    <p:column rowspan="3">
+
+                        <p:dataTable id="menuTable" value="#{builMenu.menu}" var="mData" >
+                            <f:facet name="header">Menu</f:facet>
+                            <p:column>
+                                <h:outputText value="#{mData.numDay}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{mData.nameItem}"/>
+                            </p:column>
+                            <p:column>
+                                <p:column>
+                                    <h:outputText value="#{mData.dish.name}"/>
+                                </p:column>
+                            </p:column>
+                        </p:dataTable> 
+
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:fieldset id="lunchDishes" legend="Обед" style="margin-top: 0">
+                            <p:outputPanel id="dropAreaL">
+                                <h:outputText value="!!!Drop here!!!" rendered="#{empty builMenu.lunchDishList}" style="font-size:24px;" />
+                                <p:dataTable id="selectedLunchDishesTable" var="dish" value="#{builMenu.lunchDishList}" rendered="#{not empty builMenu.lunchDishList}">
+                                    <p:column headerText="№">
+                                        <h:outputText title="#{builMenu.lunchDishList.indexOf(dish) + 1}" value="#{builMenu.lunchDishList.indexOf(dish) + 1}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Блюдо">
+                                        <h:outputText title="#{dish.name}" value="#{dish.name}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </p:fieldset>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:fieldset id="dinnerDishes" legend="Ужин" style="margin-top: 0">
+                            <p:outputPanel id="dropAreaD">
+                                <h:outputText value="!!!Drop here!!!" rendered="#{empty builMenu.dinnerDishList}" style="font-size:24px;" />
+                                <p:dataTable id="selectedDinnerDishesTable" var="dish" value="#{builMenu.dinnerDishList}" rendered="#{not empty builMenu.dinnerDishList}">
+                                    <p:column headerText="№">
+                                        <h:outputText title="#{builMenu.dinnerDishList.indexOf(dish) + 1}" value="#{builMenu.dinnerDishList.indexOf(dish) + 1}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Блюдо">
+                                        <h:outputText title="#{dish.name}" value="#{dish.name}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </p:fieldset>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="width: 300px;">
+                        <h:outputText value="1 column"/>
+                    </p:column>
+                    <p:column style="width: 300px">
+                        <p:commandButton value="addDay" actionListener="#{builMenu.addDayMenu()}" 
+                                         update="dropAreaB dropAreaL dropAreaD menuTable" />
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="3 column"/>
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+
+            <p:droppable for="breakfastDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
+                <p:ajax listener="#{builMenu.onBreakfastDishDrop}" update="dropAreaB availableDishes" />
+            </p:droppable>
+            <p:droppable for="lunchDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
+                <p:ajax listener="#{builMenu.onLunchDishDrop}" update="dropAreaL availableDishes" />
+            </p:droppable>
+            <p:droppable for="dinnerDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
+                <p:ajax listener="#{builMenu.onDinnerDishDrop}" update="dropAreaD availableDishes" />
+            </p:droppable>
+
+        </p:layoutUnit>
+    </ui:composition>
+</html>

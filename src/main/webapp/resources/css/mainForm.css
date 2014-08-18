@@ -1,0 +1,23 @@
+/* 
+    Created on : Jul 30, 2014, 10:20:58 AM
+    Author     : a_matskevich
+*/
+
+.ajaxStatusPanel{
+    display:block; position:absolute; top:11px; left:500px; width:auto;
+    height:auto; z-index: 99999;
+}
+
+.myPanelGridLeft {
+    vertical-align: top;
+    width: 400px;
+}
+
+.myPanelGridRight {
+    vertical-align: top;
+}
+
+.myPGrid {
+    width: 100%;
+    border:none;
+}
