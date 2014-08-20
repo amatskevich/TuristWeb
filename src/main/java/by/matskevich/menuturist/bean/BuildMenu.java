@@ -1,12 +1,15 @@
 package by.matskevich.menuturist.bean;
 
+import by.matskevich.menuturist.enity.Ingrediente;
 import by.matskevich.menuturist.object.Dish;
 import by.matskevich.menuturist.object.MenuItem;
 import by.matskevich.menuturist.object.MenuItemEnum;
+import by.matskevich.menuturist.persistence.DatabaseManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,12 +26,17 @@ public class BuildMenu implements Serializable {
     @Inject
     Application apppBean;
 
+    @EJB
+    DatabaseManager dm;
+
     private List<Dish> dishList;
     private List<Dish> breakfastDishList;
     private List<Dish> lunchDishList;
     private List<Dish> dinnerDishList;
     private List<MenuItem> menu;
     private int numberDay;
+
+    private List<Ingrediente> ingrList;
 
     @PostConstruct
     public void init() {
@@ -48,6 +56,14 @@ public class BuildMenu implements Serializable {
         dishList.add(new Dish("Бутерброды"));
         dishList.add(new Dish("Картошка тушеная"));
         dishList.add(new Dish("Макароны по флотски"));
+    }
+    
+    public void onTemp() {
+        System.err.println("TEMP:");
+        List<by.matskevich.menuturist.enity.Dish> items = dm.findDishByAll(Long.valueOf(1l), null, null);
+        for (by.matskevich.menuturist.enity.Dish item : items) {
+            System.err.println(item.getName());
+        }
     }
 
     public void onBreakfastDishDrop(DragDropEvent ddEvent) {
@@ -92,7 +108,7 @@ public class BuildMenu implements Serializable {
     public void setMenu(List<MenuItem> menu) {
         this.menu = menu;
     }
-    
+
     public int getNumberDay() {
         return numberDay;
     }
