@@ -1,5 +1,7 @@
 package by.matskevich.menuturist.object;
 
+import by.matskevich.menuturist.enity.Dish;
+
 /**
  *
  * @author a_matskevich

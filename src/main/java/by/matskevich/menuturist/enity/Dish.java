@@ -1,11 +1,14 @@
 package by.matskevich.menuturist.enity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -32,7 +35,10 @@ public class Dish implements Serializable {
     
     @Column(name = "DESCRIPTION")
     private String description;
-
+    
+    @OneToMany(mappedBy = "dish", fetch = FetchType.EAGER)
+    private List<Composition> ingrCountList;
+    
     public Long getId() {
         return id;
     }
@@ -57,6 +63,14 @@ public class Dish implements Serializable {
         this.description = description;
     }
 
+    public List<Composition> getIngrCountList() {
+        return ingrCountList;
+    }
+
+    public void setIngrCountList(List<Composition> ingrCountList) {
+        this.ingrCountList = ingrCountList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -79,7 +93,7 @@ public class Dish implements Serializable {
 
     @Override
     public String toString() {
-        return "by.matskevich.menuturist.enity.Dish[ id=" + id + " ]";
+        return "Dish{" + "id=" + id + ", name=" + name + '}';
     }
     
 }

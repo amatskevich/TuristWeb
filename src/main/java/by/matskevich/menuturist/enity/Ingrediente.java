@@ -90,7 +90,7 @@ public class Ingrediente implements Serializable {
 
     @Override
     public String toString() {
-        return "by.matskevich.menuturist.enity.Ingrediente[ id=" + id + " ]";
+        return "Ingrediente{" + "id=" + id + ", name=" + name + '}';
     }
     
 }

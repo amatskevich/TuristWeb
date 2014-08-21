@@ -1,13 +1,16 @@
 package by.matskevich.menuturist.bean;
 
+import by.matskevich.menuturist.enity.Composition;
+import by.matskevich.menuturist.enity.Dish;
 import by.matskevich.menuturist.enity.Ingrediente;
-import by.matskevich.menuturist.object.Dish;
 import by.matskevich.menuturist.object.MenuItem;
 import by.matskevich.menuturist.object.MenuItemEnum;
 import by.matskevich.menuturist.persistence.DatabaseManager;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -19,7 +22,7 @@ import org.primefaces.event.DragDropEvent;
  *
  * @author a_matskevich
  */
-@Named(value = "builMenu")
+@Named(value = "buildMenu")
 @SessionScoped
 public class BuildMenu implements Serializable {
 
@@ -35,6 +38,9 @@ public class BuildMenu implements Serializable {
     private List<Dish> dinnerDishList;
     private List<MenuItem> menu;
     private int numberDay;
+    private int countPeople;
+    
+    private HashMap<Ingrediente, Double> listProvisions;
 
     private List<Ingrediente> ingrList;
 
@@ -45,43 +51,52 @@ public class BuildMenu implements Serializable {
         dinnerDishList = new ArrayList<Dish>();
         menu = new ArrayList<MenuItem>();
         numberDay = 1;
+        countPeople = 1;
+        
+        listProvisions = new HashMap<Ingrediente, Double>();
 
-        dishList = new ArrayList<Dish>();
-        dishList.add(new Dish("Овсяная каша"));
-        dishList.add(new Dish("Гречневая каша"));
-        dishList.add(new Dish("Шашлык"));
-        dishList.add(new Dish("Кисель"));
-        dishList.add(new Dish("Чай"));
-        dishList.add(new Dish("Дымлама"));
-        dishList.add(new Dish("Бутерброды"));
-        dishList.add(new Dish("Картошка тушеная"));
-        dishList.add(new Dish("Макароны по флотски"));
+        dishList = dm.findAll(Dish.class);
     }
     
     public void onTemp() {
         System.err.println("TEMP:");
-        List<by.matskevich.menuturist.enity.Dish> items = dm.findDishByAll(Long.valueOf(1l), null, null);
-        for (by.matskevich.menuturist.enity.Dish item : items) {
-            System.err.println(item.getName());
+    }
+    
+    public void calcIngr() {
+        for (MenuItem menuItem : menu) {
+            Dish dish = menuItem.getDish();
+            for (Composition comp : dish.getIngrCountList()) {
+                if (listProvisions.containsKey(comp.getIngr())) {
+                    listProvisions.put(comp.getIngr(), listProvisions.get(comp.getIngr()) + (comp.getQuantity() * countPeople));
+                } else {
+                    listProvisions.put(comp.getIngr(), comp.getQuantity() * countPeople);
+                }
+            }
+        }
+        
+        Set<Ingrediente> keys = listProvisions.keySet();
+        for (Ingrediente temp1 : keys) {
+            System.err.print(temp1.getName() + "    ");
+            System.err.println(listProvisions.get(temp1));
         }
     }
 
     public void onBreakfastDishDrop(DragDropEvent ddEvent) {
         Dish dish = ((Dish) ddEvent.getData());
 
-        breakfastDishList.add(new Dish(dish.getName()));
+        breakfastDishList.add(dm.findById(dish.getId(), Dish.class));
     }
 
     public void onLunchDishDrop(DragDropEvent ddEvent) {
         Dish dish = ((Dish) ddEvent.getData());
 
-        lunchDishList.add(new Dish(dish.getName()));
+        lunchDishList.add(dm.findById(dish.getId(), Dish.class));
     }
 
     public void onDinnerDishDrop(DragDropEvent ddEvent) {
         Dish dish = ((Dish) ddEvent.getData());
 
-        dinnerDishList.add(new Dish(dish.getName()));
+        dinnerDishList.add(dm.findById(dish.getId(), Dish.class));
     }
 
     public void addDayMenu() {
@@ -101,6 +116,15 @@ public class BuildMenu implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="getters and setters">
+    
+    public int getCountPeople() {
+        return countPeople;
+    }
+
+    public void setCountPeople(int countPeople) {
+        this.countPeople = countPeople;
+    }
+    
     public List<MenuItem> getMenu() {
         return menu;
     }
