@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -39,10 +40,9 @@ public class BuildMenu implements Serializable {
     private List<MenuItem> menu;
     private int numberDay;
     private int countPeople;
+    private final int[] countPeoples = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};;
     
     private HashMap<Ingrediente, Double> listProvisions;
-
-    private List<Ingrediente> ingrList;
 
     @PostConstruct
     public void init() {
@@ -73,12 +73,11 @@ public class BuildMenu implements Serializable {
                 }
             }
         }
-        
-        Set<Ingrediente> keys = listProvisions.keySet();
-        for (Ingrediente temp1 : keys) {
-            System.err.print(temp1.getName() + "    ");
-            System.err.println(listProvisions.get(temp1));
-        }
+    }
+    
+    public List<Map.Entry<Ingrediente, Double>> getProducts() {
+        Set<Map.Entry<Ingrediente, Double>> productSet = listProvisions.entrySet();
+        return new ArrayList<Map.Entry<Ingrediente, Double>>(productSet);
     }
 
     public void onBreakfastDishDrop(DragDropEvent ddEvent) {
@@ -116,6 +115,18 @@ public class BuildMenu implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="getters and setters">
+    
+    public int[] getCountPeoples() {
+        return countPeoples;
+    }
+    
+    public HashMap<Ingrediente, Double> getListProvisions() {
+        return listProvisions;
+    }
+
+    public void setListProvisions(HashMap<Ingrediente, Double> listProvisions) {
+        this.listProvisions = listProvisions;
+    }
     
     public int getCountPeople() {
         return countPeople;

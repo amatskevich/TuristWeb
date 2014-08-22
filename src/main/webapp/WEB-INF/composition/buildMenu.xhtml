@@ -103,14 +103,18 @@
                 </p:row>
                 <p:row>
                     <p:column style="width: 300px;">
-                        <h:inputText value="#{buildMenu.countPeople}" />
+                        <p:outputLabel for="car" value="Колечество едоков: " />
+                        <p:selectOneMenu id="car" value="#{buildMenu.countPeople}">
+                            <f:selectItems value="#{buildMenu.countPeoples}" />
+                        </p:selectOneMenu>
                     </p:column>
                     <p:column style="width: 300px">
                         <p:commandButton value="addDay" actionListener="#{buildMenu.addDayMenu()}" 
                                          update="dropAreaB dropAreaL dropAreaD menuTable" />
                     </p:column>
                     <p:column>
-                        <p:commandButton value="calcIngr" actionListener="#{buildMenu.calcIngr()}"/>
+                        <p:commandButton value="calcIngr" actionListener="#{buildMenu.calcIngr()}"
+                                         update="ingrListTable"/>
                     </p:column>
                 </p:row>
 
@@ -125,6 +129,18 @@
             <p:droppable for="dinnerDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
                 <p:ajax listener="#{buildMenu.onDinnerDishDrop}" update="dropAreaD availableDishes" />
             </p:droppable>
+
+            <p:dataTable id="ingrListTable" var="ingr" value="#{buildMenu.products}">
+                <p:column headerText="Название">
+                    <h:outputText value="#{ingr.key.name}"/>
+                </p:column>
+                <p:column headerText="Количество">
+                    <h:outputText value="#{ingr.value}"/>
+                </p:column>
+                <p:column headerText="Ед. измерения">
+                    <h:outputText value="#{ingr.key.measure}"/>
+                </p:column>
+            </p:dataTable>
 
         </p:layoutUnit>
     </ui:composition>
