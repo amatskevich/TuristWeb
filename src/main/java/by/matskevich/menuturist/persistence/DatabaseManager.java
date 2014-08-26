@@ -1,23 +1,13 @@
 package by.matskevich.menuturist.persistence;
 
-import by.matskevich.menuturist.enity.Dish;
-import by.matskevich.menuturist.enity.Dish_;
-import by.matskevich.menuturist.enity.Ingrediente;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 
 /**
  *
