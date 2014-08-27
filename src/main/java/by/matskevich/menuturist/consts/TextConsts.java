@@ -30,6 +30,7 @@ public class TextConsts implements Serializable {
     public static final String NAME = "Название";
     public static final String AMOUNT = "Количество";
     public static final String UNIT = "Ед. измерения";
+    public static final String NO_RECORDS = "Нет записей";
 
     public String getLIST_DISHES() {
         return LIST_DISHES;
@@ -101,6 +102,10 @@ public class TextConsts implements Serializable {
 
     public String getUNIT() {
         return UNIT;
+    }
+
+    public String getNO_RECORDS() {
+        return NO_RECORDS;
     }
     
 }

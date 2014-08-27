@@ -14,7 +14,7 @@
 
             </h:form>
         </f:view>
-        
+
         <f:view id="mainView">
             <h:form id="mainForm">
 
@@ -27,21 +27,27 @@
                     </f:facet>
                 </p:ajaxStatus>
 
-                <p:layout fullPage="true">
+                <p:layout fullPage="true" id="mainLayout" widgetVar="mainLayout">
                     <p:growl id="growl" showDetail="true" escape="false" life="6000" globalOnly="true"/>
 
-                    <p:layoutUnit id="northFormContent" position="north" footer="Я ВОЗЬМУ С СОБОЙ В ПОХОД" size="100">
-                        <p:tabMenu id="tabMainMenu" activeIndex="#{param.i}">
-                            <p:menuitem value="Собрать меню">
-                                <f:param name="i" value="0"/>
-                            </p:menuitem>
-                            <p:menuitem value="Собрать вещи" onclick="mtsk('dsfdsf')">
-                                <f:param name="i" value="1"/>
-                            </p:menuitem>
-                        </p:tabMenu>
+                    <p:layoutUnit id="northFormContent" position="north" footer="Я ВОЗЬМУ С СОБОЙ В ПОХОД">
+                            <f:ajax render=":mainForm:centerContentPanel" execute="@this">
+                                <h:commandButton value="Собрать меню" action="#{appBean.changeIncludeSrc}" 
+                                                 styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                                    <f:param name="src" value="#{appBean.BUILD_MENU}" />
+                                </h:commandButton>
+                                <h:commandButton value="Собрать вещи" action="#{appBean.changeIncludeSrc}" 
+                                                 styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                                    <f:param name="src" value="#{appBean.BUILD_DISH}" />
+                                </h:commandButton>
+                            </f:ajax>
                     </p:layoutUnit>
 
-                    <ui:include src="/WEB-INF/composition/buildMenu.xhtml"/>
+                    <p:layoutUnit id="center" position="center">
+                        <h:panelGroup id="centerContentPanel">
+                            <ui:include src="#{appBean.includeSrc}"/>
+                        </h:panelGroup>
+                    </p:layoutUnit>
 
                 </p:layout>
 
@@ -51,12 +57,8 @@
     </h:body>
 
     <h:outputScript library="js" name="common.js" target="head"/>
-    <!--<h:outputScript library="js" name="jquery.js" target="head"/>-->
-    <!--<h:outputScript library="js" name="jquery-ui.js" target="head"/>-->
     <h:outputScript library="js" name="prime-ui-min.js" target="head"/>
     <h:outputStylesheet library="css" name="mainForm.css"/>
-    <!--<h:outputStylesheet library="css" name="jquery-ui.css"/>-->
     <h:outputStylesheet library="css" name="theme.css"/>
-    <!--<h:outputStylesheet library="css" name="prime-ui-min.css"/>--> 
 
 </html>

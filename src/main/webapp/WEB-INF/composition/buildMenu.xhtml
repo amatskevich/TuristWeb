@@ -7,7 +7,6 @@
     <ui:composition> 
         <!--fullPage="true"-->
 
-        <p:layoutUnit id="center" position="center">
 
             <p:panelGrid id="mainGrid" columnClasses="myPanelGridLeft myPanelGridRight" styleClass="myPGrid">
                 <p:row>
@@ -48,7 +47,7 @@
                     </p:column>
                     <p:column rowspan="3">
 
-                        <p:dataTable id="menuTable" value="#{buildMenu.menu}" var="mData" >
+                        <p:dataTable id="menuTable" value="#{buildMenu.menu}" var="mData" emptyMessage="#{textConsts.NO_RECORDS}">
                             <f:facet name="header">#{textConsts.MENU}</f:facet>
                             <p:column headerText="#{textConsts.DAY_OF_CAMPING}">
                                 <h:outputText value="#{mData.numDay}"/>
@@ -106,9 +105,9 @@
                 </p:row>
                 <p:row>
                     <p:column style="width: 300px;">
-                        <p:outputLabel for="car" value="#{textConsts.AMOUNT_PEOPLE}" />
+                        <p:outputLabel for="car" value="#{textConsts.AMOUNT_PEOPLE}" style="vertical-align: super;"/>
                         <p:selectOneMenu id="car" value="#{buildMenu.countPeople}">
-                            <f:selectItems value="#{buildMenu.countPeoples}" />
+                            <f:selectItems value="#{buildMenu.countPeoples}"/>
                         </p:selectOneMenu>
                     </p:column>
                     <p:column style="width: 300px">
@@ -133,7 +132,7 @@
                 <p:ajax listener="#{buildMenu.onDinnerDishDrop}" update="dropAreaD availableDishes" />
             </p:droppable>
 
-            <p:dataTable id="ingrListTable" var="ingr" value="#{buildMenu.products}">
+            <p:dataTable id="ingrListTable" var="ingr" value="#{buildMenu.products}" emptyMessage="#{textConsts.NO_RECORDS}">
                 <f:facet name="header">#{textConsts.NECESSARY_INGR}</f:facet>
                 <p:column headerText="#{textConsts.NAME}">
                     <h:outputText value="#{ingr.key.name}"/>
@@ -152,6 +151,5 @@
                 </f:facet> 
             </p:dataTable>
 
-        </p:layoutUnit>
     </ui:composition>
 </html>
