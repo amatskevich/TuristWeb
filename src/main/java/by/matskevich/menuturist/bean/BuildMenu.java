@@ -40,7 +40,6 @@ public class BuildMenu implements Serializable {
     private List<MenuItem> menu;
     private int numberDay;
     private int countPeople;
-    private final int[] countPeoples = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};;
     
     private HashMap<Ingrediente, Double> listProvisions;
 
@@ -115,11 +114,7 @@ public class BuildMenu implements Serializable {
     }
 
     // <editor-fold defaultstate="collapsed" desc="getters and setters">
-    
-    public int[] getCountPeoples() {
-        return countPeoples;
-    }
-    
+        
     public HashMap<Ingrediente, Double> getListProvisions() {
         return listProvisions;
     }

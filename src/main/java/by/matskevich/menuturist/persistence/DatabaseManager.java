@@ -25,6 +25,15 @@ public class DatabaseManager {
     }
 
     //-----------------------------------------------------
+    public <X extends Object> X create(X obj) {
+        em.persist(obj);
+        return obj;
+    }
+
+    public <X extends Object> X save(X obj) {
+        return em.merge(obj);
+    }
+
     public <X extends Object> List<X> findAll(Class<X> type) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<X> query = builder.createQuery(type);
@@ -32,14 +41,14 @@ public class DatabaseManager {
         Root<X> root = query.from(type);
         return em.createQuery(query).getResultList();
     }
-    
+
     public <X extends Object> X findById(Long Id, Class<X> type) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<X> query = builder.createQuery(type);
 //	@SuppressWarnings("unused")
         Root<X> root = query.from(type);
         query.select(root).where(builder.equal(root.get("id").as(Long.class), Id));
-        
+
         return em.createQuery(query).getSingleResult();
     }
 
@@ -70,7 +79,6 @@ public class DatabaseManager {
 //		);
 //        return em.createQuery(query).getResultList();
 //    }
-
     //---------------------------------------------------
 //    public <X extends Object> X save(X obj) throws PersistenceException {
 //        return em.merge(obj);
@@ -87,5 +95,4 @@ public class DatabaseManager {
 //    public <X extends Object> List<X> createNamedQuery(Class<X> type, String queryName, Map<String, Object> paramMap) throws PersistenceException, NoSuchMethodException {
 //        throw new NoSuchMethodException();
 //    }
-
 }

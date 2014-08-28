@@ -38,6 +38,10 @@
                                 </h:commandButton>
                                 <h:commandButton value="Собрать вещи" action="#{appBean.changeIncludeSrc}" 
                                                  styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                                    <f:param name="src" value="#{appBean.GATHER_THINGS}" />
+                                </h:commandButton>
+                                <h:commandButton value="Создание блюд и продуктов" action="#{appBean.changeIncludeSrc}" 
+                                                 styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
                                     <f:param name="src" value="#{appBean.BUILD_DISH}" />
                                 </h:commandButton>
                             </f:ajax>

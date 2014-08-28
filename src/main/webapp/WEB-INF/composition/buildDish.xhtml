@@ -5,10 +5,95 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <ui:composition> 
-        <!--fullPage="true"-->
 
 
-            <h1>HELLOW WRLD!!</h1>
+        <p:tabView dynamic="true" cache="true">
+            <p:tab title="Создать блюдо" id="createDishTab">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:dataTable id="availableIngr" var="ingr" value="#{createDish.ingrList}">
+                        <f:facet name="header">Список ингредиентов</f:facet>
+                        <p:column style="width:20px">
+                            <h:outputText id="dragIcon" value="INGR"/>
+                            <p:draggable for="dragIcon" revert="true" helper="clone"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.NUMBER_SIGN}" style="width: 2%">
+                            <h:outputText title="#{createDish.ingrList.indexOf(ingr) + 1}" value="#{createDish.ingrList.indexOf(ingr) + 1}"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.NAME}">
+                            <h:outputText title="#{ingr.name}" value="#{ingr.name}" />
+                        </p:column>
+                        <p:column headerText="Описание">
+                            <h:outputText title="#{ingr.description}" value="#{ingr.description}" />
+                        </p:column>
+
+                    </p:dataTable>
+                    <p:column>
+                        <h:panelGrid columns="2" cellpadding="5">
+
+                            <p:outputLabel value="Название блюда:" for="nameDish"/>
+                            <p:inputText id="nameDish" value="#{createDish.newDish.name}"/>
+
+                            <p:outputLabel value="Описание блюда:" for="descDish"/>
+                            <p:inputTextarea id="descDish" rows="6" cols="33" value="#{createDish.newDish.description}"/>
+
+                        </h:panelGrid>
+                        <p:fieldset id="dropIngrSet" legend="Ингредиенты блюда" style="margin-top: 0">
+                            <p:outputPanel id="dropIngr">
+                                <h:outputText value="Перетащите ингредиент" rendered="#{empty createDish.compList}" style="font-size:24px;" />
+                                <p:dataTable id="selectedIngrTable" var="comp" value="#{createDish.compList}" rendered="#{not empty createDish.compList}"
+                                             editable="true" editMode="cell" widgetVar="selectedIngrTable">
+                                    <p:column headerText="#{textConsts.NUMBER_SIGN}">
+                                        <h:outputText title="#{createDish.compList.indexOf(comp) + 1}" value="#{createDish.compList.indexOf(comp) + 1}"/>
+                                    </p:column>
+
+                                    <p:column headerText="#{textConsts.NAME}">
+                                        <h:outputText title="#{comp.ingr.name}" value="#{comp.ingr.name}" />
+                                    </p:column>
+                                    <p:column headerText="#{textConsts.AMOUNT} на чел.">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{comp.quantity}" /></f:facet>
+                                            <f:facet name="input"><p:inputMask value="#{comp.quantity}" style="width:96%" mask="9.999"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    <p:column headerText="Ед. измерения">
+                                        <h:outputText title="#{comp.ingr.measure}" value="#{comp.ingr.measure}" />
+                                    </p:column>
+                                    <p:column headerText="Описание">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{comp.desc}" /></f:facet>
+                                            <f:facet name="input"><p:inputText value="#{comp.desc}" style="width:96%"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </p:fieldset>
+                        <p:commandButton value="Создать блюдо" actionListener="#{createDish.createDish()}" update="createDishTab"/>
+                        <p:commandButton value="Очистить" actionListener="#{createDish.clearTab()}" update="createDishTab"/>
+                    </p:column>
+                    <p:droppable for="dropIngrSet" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableIngr" onDrop="handleDrop">
+                        <p:ajax listener="#{createDish.onIngredienteDrop}" update="dropIngr availableIngr" />
+                    </p:droppable>
+                </h:panelGrid>
+            </p:tab>
+            <p:tab title="Создать ингредиент">
+
+                <h:panelGrid id="createIngrGrid" columns="2" cellpadding="5">
+
+                    <p:outputLabel value="Название ингредиента:" for="nameIngr"/>
+                    <p:inputText id="nameIngr" value="#{createIngr.newIngr.name}"/>
+
+                    <p:outputLabel value="Единица измерения:" for="measureIngr"/>
+                    <p:inputText id="measureIngr" value="#{createIngr.newIngr.measure}"/>
+
+                    <p:outputLabel value="Описание ингредиента:" for="descIngr"/>
+                    <p:inputTextarea id="descIngr" rows="6" cols="33" value="#{createIngr.newIngr.description}"/>
+
+                </h:panelGrid>
+                <p:commandButton value="Создать игредиент" actionListener="#{createIngr.createIngr()}" update="createIngrGrid"/>
+                <p:commandButton value="Очистить" actionListener="#{createIngr.clearTab()}" update="createIngrGrid"/>
+
+            </p:tab>
+        </p:tabView>
 
     </ui:composition>
 </html>

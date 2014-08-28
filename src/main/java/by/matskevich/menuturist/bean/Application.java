@@ -16,6 +16,7 @@ public class Application implements Serializable {
     
     private static final String BUILD_MENU = "/WEB-INF/composition/buildMenu.xhtml";
     private static final String BUILD_DISH = "/WEB-INF/composition/buildDish.xhtml";
+    private static final String GATHER_THINGS = "/WEB-INF/composition/gatherThings.xhtml";
     
     private String includeSrc;
     
@@ -43,6 +44,10 @@ public class Application implements Serializable {
 
     public String getBUILD_DISH() {
         return BUILD_DISH;
+    }
+
+    public String getGATHER_THINGS() {
+        return GATHER_THINGS;
     }
     
 }

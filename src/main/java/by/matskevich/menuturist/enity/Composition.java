@@ -37,11 +37,11 @@ public class Composition implements Serializable {
     @Column(name = "DESCRIPTION")
     private String desc;
     
-    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_DISH", referencedColumnName = "ID")
     private Dish dish;
     
-    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_INGREDIENTE", referencedColumnName = "ID")
     private Ingrediente ingr;
 

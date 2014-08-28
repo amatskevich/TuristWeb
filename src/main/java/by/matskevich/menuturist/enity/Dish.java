@@ -2,6 +2,7 @@ package by.matskevich.menuturist.enity;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +37,7 @@ public class Dish implements Serializable {
     @Column(name = "DESCRIPTION")
     private String description;
     
-    @OneToMany(mappedBy = "dish", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "dish", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Composition> ingrCountList;
     
     public Long getId() {

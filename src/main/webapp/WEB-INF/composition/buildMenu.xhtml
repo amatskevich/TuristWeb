@@ -8,148 +8,151 @@
         <!--fullPage="true"-->
 
 
-            <p:panelGrid id="mainGrid" columnClasses="myPanelGridLeft myPanelGridRight" styleClass="myPGrid">
-                <p:row>
-                    <p:column rowspan="3" style="width: 300px">
-                        <p:fieldset id="availableDishesField" legend="#{textConsts.LIST_DISHES}">
-                            <p:dataTable id="availableDishes" var="dish" value="#{buildMenu.dishList}">
-                                <p:column style="width:20px">
-                                    <h:outputText id="dragIcon" value="SMT"/>
-                                    <p:draggable for="dragIcon" revert="true" helper="clone" snap="true" />
-                                </p:column>
+        <p:panelGrid id="mainGrid" columnClasses="myPanelGridLeft myPanelGridRight" styleClass="myPGrid">
+            <p:row>
+                <p:column rowspan="3" style="width: 300px">
+                    <p:fieldset id="availableDishesField" legend="#{textConsts.LIST_DISHES}">
+                        <p:dataTable id="availableDishes" var="dish" value="#{buildMenu.dishList}">
+                            <p:column style="width:20px">
+                                <h:outputText id="dragIcon" value="SMT"/>
+                                <p:draggable for="dragIcon" revert="true" helper="clone" snap="true" />
+                            </p:column>
 
-                                <p:column headerText="#{textConsts.NUMBER_SIGN}" style="width: 2%">
-                                    <h:outputText title="#{buildMenu.dishList.indexOf(dish) + 1}" value="#{buildMenu.dishList.indexOf(dish) + 1}"/>
+                            <p:column headerText="#{textConsts.NUMBER_SIGN}" style="width: 2%">
+                                <h:outputText title="#{buildMenu.dishList.indexOf(dish) + 1}" value="#{buildMenu.dishList.indexOf(dish) + 1}"/>
+                            </p:column>
+
+                            <p:column headerText="#{textConsts.DISH}">
+                                <h:outputText title="#{dish.name}" value="#{dish.name}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:fieldset>
+                </p:column>
+                <p:column style="width: 300px">
+                    <p:fieldset id="breakfastDishes" legend="#{textConsts.BREAKFAST}" style="margin-top: 0">
+                        <p:outputPanel id="dropAreaB">
+                            <h:outputText value="#{textConsts.DROP_HERE}" rendered="#{empty buildMenu.breakfastDishList}" style="font-size:24px;" />
+                            <p:dataTable id="selectedBreakfastDishesTable" var="dish" value="#{buildMenu.breakfastDishList}" rendered="#{not empty buildMenu.breakfastDishList}">
+                                <p:column headerText="#{textConsts.NUMBER_SIGN}">
+                                    <h:outputText title="#{buildMenu.breakfastDishList.indexOf(dish) + 1}" value="#{buildMenu.breakfastDishList.indexOf(dish) + 1}"/>
                                 </p:column>
 
                                 <p:column headerText="#{textConsts.DISH}">
                                     <h:outputText title="#{dish.name}" value="#{dish.name}" />
                                 </p:column>
-
                             </p:dataTable>
-                        </p:fieldset>
-                    </p:column>
-                    <p:column style="width: 300px">
-                        <p:fieldset id="breakfastDishes" legend="#{textConsts.BREAKFAST}" style="margin-top: 0">
-                            <p:outputPanel id="dropAreaB">
-                                <h:outputText value="#{textConsts.DROP_HERE}" rendered="#{empty buildMenu.breakfastDishList}" style="font-size:24px;" />
-                                <p:dataTable id="selectedBreakfastDishesTable" var="dish" value="#{buildMenu.breakfastDishList}" rendered="#{not empty buildMenu.breakfastDishList}">
-                                    <p:column headerText="#{textConsts.NUMBER_SIGN}">
-                                        <h:outputText title="#{buildMenu.breakfastDishList.indexOf(dish) + 1}" value="#{buildMenu.breakfastDishList.indexOf(dish) + 1}"/>
-                                    </p:column>
+                        </p:outputPanel>
+                    </p:fieldset>
+                </p:column>
+                <p:column rowspan="3">
 
-                                    <p:column headerText="#{textConsts.DISH}">
-                                        <h:outputText title="#{dish.name}" value="#{dish.name}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </p:outputPanel>
-                        </p:fieldset>
-                    </p:column>
-                    <p:column rowspan="3">
+                    <p:dataTable id="menuTable" value="#{buildMenu.menu}" var="mData" emptyMessage="#{textConsts.NO_RECORDS}">
+                        <f:facet name="header">#{textConsts.MENU}</f:facet>
+                        <p:column headerText="#{textConsts.DAY_OF_CAMPING}">
+                            <h:outputText value="#{mData.numDay}"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.TIME_TO_EAT}">
+                            <h:outputText value="#{mData.nameItem}"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.DISH}">
+                            <h:outputText value="#{mData.dish.name}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <h:commandLink value="#{textConsts.EXSPORT_IN_XLS}" style="text-decoration: none; float:right;" 
+                                           rendered="#{buildMenu.menu!=null and buildMenu.menu.size()!=0}">  
+                                <p:dataExporter type="xls" target="menuTable" fileName="menu" postProcessor="#{ExportUtils.postProcessXLS}"/>
+                            </h:commandLink> 
+                        </f:facet> 
+                    </p:dataTable> 
 
-                        <p:dataTable id="menuTable" value="#{buildMenu.menu}" var="mData" emptyMessage="#{textConsts.NO_RECORDS}">
-                            <f:facet name="header">#{textConsts.MENU}</f:facet>
-                            <p:column headerText="#{textConsts.DAY_OF_CAMPING}">
-                                <h:outputText value="#{mData.numDay}"/>
-                            </p:column>
-                            <p:column headerText="#{textConsts.TIME_TO_EAT}">
-                                <h:outputText value="#{mData.nameItem}"/>
-                            </p:column>
-                            <p:column headerText="#{textConsts.DISH}">
-                                <h:outputText value="#{mData.dish.name}"/>
-                            </p:column>
-                            <f:facet name="footer">
-                                <h:commandLink value="#{textConsts.EXSPORT_IN_XLS}" style="text-decoration: none; float:right;" 
-                                               rendered="#{buildMenu.menu!=null and buildMenu.menu.size()!=0}">  
-                                    <p:dataExporter type="xls" target="menuTable" fileName="menu" postProcessor="#{ExportUtils.postProcessXLS}"/>
-                                </h:commandLink> 
-                            </f:facet> 
-                        </p:dataTable> 
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column>
+                    <p:fieldset id="lunchDishes" legend="#{textConsts.LUNCH}" style="margin-top: 0">
+                        <p:outputPanel id="dropAreaL">
+                            <h:outputText value="#{textConsts.DROP_HERE}" rendered="#{empty buildMenu.lunchDishList}" style="font-size:24px;" />
+                            <p:dataTable id="selectedLunchDishesTable" var="dish" value="#{buildMenu.lunchDishList}" rendered="#{not empty buildMenu.lunchDishList}">
+                                <p:column headerText="#{textConsts.NUMBER_SIGN}">
+                                    <h:outputText title="#{buildMenu.lunchDishList.indexOf(dish) + 1}" value="#{buildMenu.lunchDishList.indexOf(dish) + 1}"/>
+                                </p:column>
+                                <p:column headerText="#{textConsts.DISH}">
+                                    <h:outputText title="#{dish.name}" value="#{dish.name}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:outputPanel>
+                    </p:fieldset>
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column>
+                    <p:fieldset id="dinnerDishes" legend="#{textConsts.DINNER}" style="margin-top: 0">
+                        <p:outputPanel id="dropAreaD">
+                            <h:outputText value="#{textConsts.DROP_HERE}" rendered="#{empty buildMenu.dinnerDishList}" style="font-size:24px;" />
+                            <p:dataTable id="selectedDinnerDishesTable" var="dish" value="#{buildMenu.dinnerDishList}" rendered="#{not empty buildMenu.dinnerDishList}">
+                                <p:column headerText="#{textConsts.NUMBER_SIGN}">
+                                    <h:outputText title="#{buildMenu.dinnerDishList.indexOf(dish) + 1}" value="#{buildMenu.dinnerDishList.indexOf(dish) + 1}"/>
+                                </p:column>
 
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:fieldset id="lunchDishes" legend="#{textConsts.LUNCH}" style="margin-top: 0">
-                            <p:outputPanel id="dropAreaL">
-                                <h:outputText value="#{textConsts.DROP_HERE}" rendered="#{empty buildMenu.lunchDishList}" style="font-size:24px;" />
-                                <p:dataTable id="selectedLunchDishesTable" var="dish" value="#{buildMenu.lunchDishList}" rendered="#{not empty buildMenu.lunchDishList}">
-                                    <p:column headerText="#{textConsts.NUMBER_SIGN}">
-                                        <h:outputText title="#{buildMenu.lunchDishList.indexOf(dish) + 1}" value="#{buildMenu.lunchDishList.indexOf(dish) + 1}"/>
-                                    </p:column>
-                                    <p:column headerText="#{textConsts.DISH}">
-                                        <h:outputText title="#{dish.name}" value="#{dish.name}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </p:outputPanel>
-                        </p:fieldset>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:fieldset id="dinnerDishes" legend="#{textConsts.DINNER}" style="margin-top: 0">
-                            <p:outputPanel id="dropAreaD">
-                                <h:outputText value="#{textConsts.DROP_HERE}" rendered="#{empty buildMenu.dinnerDishList}" style="font-size:24px;" />
-                                <p:dataTable id="selectedDinnerDishesTable" var="dish" value="#{buildMenu.dinnerDishList}" rendered="#{not empty buildMenu.dinnerDishList}">
-                                    <p:column headerText="#{textConsts.NUMBER_SIGN}">
-                                        <h:outputText title="#{buildMenu.dinnerDishList.indexOf(dish) + 1}" value="#{buildMenu.dinnerDishList.indexOf(dish) + 1}"/>
-                                    </p:column>
-
-                                    <p:column headerText="#{textConsts.DISH}">
-                                        <h:outputText title="#{dish.name}" value="#{dish.name}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </p:outputPanel>
-                        </p:fieldset>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column style="width: 300px;">
+                                <p:column headerText="#{textConsts.DISH}">
+                                    <h:outputText title="#{dish.name}" value="#{dish.name}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:outputPanel>
+                    </p:fieldset>
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column style="width: 300px;">
+                    <h:panelGrid columns="2" style="margin-bottom: 10px;">
                         <p:outputLabel for="car" value="#{textConsts.AMOUNT_PEOPLE}" style="vertical-align: super;"/>
-                        <p:selectOneMenu id="car" value="#{buildMenu.countPeople}">
-                            <f:selectItems value="#{buildMenu.countPeoples}"/>
-                        </p:selectOneMenu>
-                    </p:column>
-                    <p:column style="width: 300px">
-                        <p:commandButton value="#{textConsts.ADD_DAYMENU}" actionListener="#{buildMenu.addDayMenu()}" 
-                                         update="dropAreaB dropAreaL dropAreaD menuTable" />
-                    </p:column>
-                    <p:column>
-                        <p:commandButton value="#{textConsts.CALCULATE_INGR}" actionListener="#{buildMenu.calcIngr()}"
-                                         update="ingrListTable"/>
-                    </p:column>
-                </p:row>
-
-            </p:panelGrid>
-
-            <p:droppable for="breakfastDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
-                <p:ajax listener="#{buildMenu.onBreakfastDishDrop}" update="dropAreaB availableDishes" />
-            </p:droppable>
-            <p:droppable for="lunchDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
-                <p:ajax listener="#{buildMenu.onLunchDishDrop}" update="dropAreaL availableDishes" />
-            </p:droppable>
-            <p:droppable for="dinnerDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
-                <p:ajax listener="#{buildMenu.onDinnerDishDrop}" update="dropAreaD availableDishes" />
-            </p:droppable>
-
-            <p:dataTable id="ingrListTable" var="ingr" value="#{buildMenu.products}" emptyMessage="#{textConsts.NO_RECORDS}">
-                <f:facet name="header">#{textConsts.NECESSARY_INGR}</f:facet>
-                <p:column headerText="#{textConsts.NAME}">
-                    <h:outputText value="#{ingr.key.name}"/>
+                        <p:column>
+                            <p:inputText id="car" value="#{buildMenu.countPeople}" />
+                            <p:slider for="car" maxValue="30" minValue="1"/>
+                        </p:column>
+                    </h:panelGrid>
                 </p:column>
-                <p:column headerText="#{textConsts.AMOUNT}">
-                    <h:outputText value="#{ingr.value}"/>
+                <p:column style="width: 300px">
+                    <p:commandButton value="#{textConsts.ADD_DAYMENU}" actionListener="#{buildMenu.addDayMenu()}" 
+                                     update="dropAreaB dropAreaL dropAreaD menuTable" />
                 </p:column>
-                <p:column headerText="#{textConsts.UNIT}">
-                    <h:outputText value="#{ingr.key.measure}"/>
+                <p:column>
+                    <p:commandButton value="#{textConsts.CALCULATE_INGR}" actionListener="#{buildMenu.calcIngr()}"
+                                     update="ingrListTable"/>
                 </p:column>
-                <f:facet name="footer">
-                    <h:commandLink value="#{textConsts.EXSPORT_IN_XLS}" style="text-decoration: none; float:right;" 
-                                   rendered="#{buildMenu.products!=null and buildMenu.products.size()!=0}">  
-                        <p:dataExporter type="xls" target="ingrListTable" fileName="products" postProcessor="#{ExportUtils.postProcessXLS}"/>
-                    </h:commandLink> 
-                </f:facet> 
-            </p:dataTable>
+            </p:row>
+
+        </p:panelGrid>
+
+        <p:droppable for="breakfastDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
+            <p:ajax listener="#{buildMenu.onBreakfastDishDrop}" update="dropAreaB availableDishes" />
+        </p:droppable>
+        <p:droppable for="lunchDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
+            <p:ajax listener="#{buildMenu.onLunchDishDrop}" update="dropAreaL availableDishes" />
+        </p:droppable>
+        <p:droppable for="dinnerDishes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableDishes" onDrop="handleDrop">
+            <p:ajax listener="#{buildMenu.onDinnerDishDrop}" update="dropAreaD availableDishes" />
+        </p:droppable>
+
+        <p:dataTable id="ingrListTable" var="ingr" value="#{buildMenu.products}" emptyMessage="#{textConsts.NO_RECORDS}">
+            <f:facet name="header">#{textConsts.NECESSARY_INGR}</f:facet>
+            <p:column headerText="#{textConsts.NAME}">
+                <h:outputText value="#{ingr.key.name}"/>
+            </p:column>
+            <p:column headerText="#{textConsts.AMOUNT}">
+                <h:outputText value="#{ingr.value}"/>
+            </p:column>
+            <p:column headerText="#{textConsts.UNIT}">
+                <h:outputText value="#{ingr.key.measure}"/>
+            </p:column>
+            <f:facet name="footer">
+                <h:commandLink value="#{textConsts.EXSPORT_IN_XLS}" style="text-decoration: none; float:right;" 
+                               rendered="#{buildMenu.products!=null and buildMenu.products.size()!=0}">  
+                    <p:dataExporter type="xls" target="ingrListTable" fileName="products" postProcessor="#{ExportUtils.postProcessXLS}"/>
+                </h:commandLink> 
+            </f:facet> 
+        </p:dataTable>
 
     </ui:composition>
 </html>
