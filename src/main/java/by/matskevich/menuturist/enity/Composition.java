@@ -32,6 +32,7 @@ public class Composition implements Serializable {
     private Long id;
     
     @Column(name = "QUANTITY")
+    @NotNull
     private Double quantity;
     
     @Column(name = "DESCRIPTION")

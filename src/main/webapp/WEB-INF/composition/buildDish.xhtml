@@ -9,6 +9,7 @@
 
         <p:tabView dynamic="true" cache="true">
             <p:tab title="Создать блюдо" id="createDishTab">
+                <p:growl showDetail="true" id="growlTab1"/>
                 <h:panelGrid columns="2" cellpadding="10">
                     <p:dataTable id="availableIngr" var="ingr" value="#{createDish.ingrList}">
                         <f:facet name="header">Список ингредиентов</f:facet>
@@ -30,8 +31,12 @@
                     <p:column>
                         <h:panelGrid columns="2" cellpadding="5">
 
-                            <p:outputLabel value="Название блюда:" for="nameDish"/>
-                            <p:inputText id="nameDish" value="#{createDish.newDish.name}"/>
+                            <p:outputLabel value="Название блюда:"/>
+                            <p:inputText id="nameDish" value="#{createDish.newDish.name}" converter="toUpperCaseConverter" validatorMessage="Количество символов от 2 до 30">
+                                <f:ajax event="blur" render="@this" />
+                                <f:validateLength minimum="2" maximum="30"/>
+                                
+                            </p:inputText>
 
                             <p:outputLabel value="Описание блюда:" for="descDish"/>
                             <p:inputTextarea id="descDish" rows="6" cols="33" value="#{createDish.newDish.description}"/>
@@ -52,8 +57,16 @@
                                     <p:column headerText="#{textConsts.AMOUNT} на чел.">
                                         <p:cellEditor>
                                             <f:facet name="output"><h:outputText value="#{comp.quantity}" /></f:facet>
-                                            <f:facet name="input"><p:inputMask value="#{comp.quantity}" style="width:96%" mask="9.999"/></f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText id="inpQuan" value="#{comp.quantity}" style="width:96%" maxlength="5" 
+                                                             converterMessage="Неверный ввод!" validatorMessage="Число от 0.001 до 10!">
+                                                    <f:validateDoubleRange for="inpQuan" minimum="0.001" maximum="10"/>
+                                                    <f:ajax event="blur" render=":#{p:component('growlTab1')}" />
+                                                    <p:ajax update="msgQuan" event="keyup" />
+                                                </p:inputText>
+                                            </f:facet>
                                         </p:cellEditor>
+                                        <p:message for="inpQuan" id="msgQuan"/>
                                     </p:column>
                                     <p:column headerText="Ед. измерения">
                                         <h:outputText title="#{comp.ingr.measure}" value="#{comp.ingr.measure}" />
@@ -67,7 +80,7 @@
                                 </p:dataTable>
                             </p:outputPanel>
                         </p:fieldset>
-                        <p:commandButton value="Создать блюдо" actionListener="#{createDish.createDish()}" update="createDishTab"/>
+                        <p:commandButton value="Создать блюдо" actionListener="#{createDish.createDish()}" update="createDishTab" validateClient="true" ajax="false"/>
                         <p:commandButton value="Очистить" actionListener="#{createDish.clearTab()}" update="createDishTab"/>
                     </p:column>
                     <p:droppable for="dropIngrSet" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableIngr" onDrop="handleDrop">
@@ -75,15 +88,15 @@
                     </p:droppable>
                 </h:panelGrid>
             </p:tab>
-            <p:tab title="Создать ингредиент">
 
+            <p:tab title="Создать ингредиент">
                 <h:panelGrid id="createIngrGrid" columns="2" cellpadding="5">
 
                     <p:outputLabel value="Название ингредиента:" for="nameIngr"/>
-                    <p:inputText id="nameIngr" value="#{createIngr.newIngr.name}"/>
+                    <p:inputText id="nameIngr" value="#{createIngr.newIngr.name}" styleClass="uppercase"/>
 
                     <p:outputLabel value="Единица измерения:" for="measureIngr"/>
-                    <p:inputText id="measureIngr" value="#{createIngr.newIngr.measure}"/>
+                    <p:inputText id="measureIngr" value="#{createIngr.newIngr.measure}" styleClass="uppercase"/>
 
                     <p:outputLabel value="Описание ингредиента:" for="descIngr"/>
                     <p:inputTextarea id="descIngr" rows="6" cols="33" value="#{createIngr.newIngr.description}"/>
@@ -91,7 +104,6 @@
                 </h:panelGrid>
                 <p:commandButton value="Создать игредиент" actionListener="#{createIngr.createIngr()}" update="createIngrGrid"/>
                 <p:commandButton value="Очистить" actionListener="#{createIngr.clearTab()}" update="createIngrGrid"/>
-
             </p:tab>
         </p:tabView>
 

@@ -21,3 +21,11 @@
     width: 100%;
     border:none;
 }
+
+input.uppercase {
+    text-transform: uppercase;
+}
+
+.uppercase > input {
+    text-transform: uppercase;
+}
