@@ -58,9 +58,9 @@
                                         <p:cellEditor>
                                             <f:facet name="output"><h:outputText value="#{comp.quantity}" /></f:facet>
                                             <f:facet name="input">
-                                                <p:inputText id="inpQuan" value="#{comp.quantity}" style="width:96%" maxlength="5" 
-                                                             converterMessage="Неверный ввод!" validatorMessage="Число от 0.001 до 10!">
-                                                    <f:validateDoubleRange for="inpQuan" minimum="0.001" maximum="10"/>
+                                                <p:inputText id="inpQuan" value="#{comp.quantity}" style="width:96%" maxlength="5"
+                                                             converterMessage="Неверный ввод!" validatorMessage="Число от 0.001 до 1000!">
+                                                    <f:validator validatorId="numberValidator"/>
                                                     <f:ajax event="blur" render=":#{p:component('growlTab1')}" />
                                                     <p:ajax update="msgQuan" event="keyup" />
                                                 </p:inputText>
@@ -80,7 +80,8 @@
                                 </p:dataTable>
                             </p:outputPanel>
                         </p:fieldset>
-                        <p:commandButton value="Создать блюдо" actionListener="#{createDish.createDish()}" update="createDishTab" validateClient="true" ajax="false"/>
+                        <p:commandButton id="createDishButton" value="Создать блюдо" actionListener="#{createDish.createDish()}" 
+                                         update="createDishTab" validateClient="true" ajax="false"/>
                         <p:commandButton value="Очистить" actionListener="#{createDish.clearTab()}" update="createDishTab"/>
                     </p:column>
                     <p:droppable for="dropIngrSet" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableIngr" onDrop="handleDrop">
