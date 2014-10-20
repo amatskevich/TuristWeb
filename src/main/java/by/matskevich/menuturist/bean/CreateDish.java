@@ -48,13 +48,11 @@ public class CreateDish implements Serializable {
     }
     
     public void createDish() {
-        System.err.println(newDish);
         for (Composition comp : compList) {
             if (comp.getQuantity() == null || comp.getQuantity() < 0.001 || comp.getQuantity() > 999) {
                 return;
             }
         }
-//        System.err.println("OK");
         newDish.setIngrCountList(compList);
         dm.create(newDish);
         this.init();
