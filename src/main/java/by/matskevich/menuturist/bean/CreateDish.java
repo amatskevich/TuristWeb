@@ -10,8 +10,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -24,6 +28,7 @@ public class CreateDish implements Serializable {
     private List<Ingrediente> ingrList;
     private List<Ingrediente> ingrDropList;
     private List<Composition> compList;
+    private List<Dish> dishList;
     private Dish newDish;
     
     @EJB
@@ -32,6 +37,7 @@ public class CreateDish implements Serializable {
     @PostConstruct
     public void init() {
         ingrList = dm.findAll(Ingrediente.class);
+        dishList = dm.findAll(Dish.class);
         ingrDropList = new ArrayList<Ingrediente>();
         compList = new ArrayList<Composition>();
         newDish = new Dish();
@@ -60,6 +66,17 @@ public class CreateDish implements Serializable {
     
     public void clearTab() {
         this.init();
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        Dish selected = (Dish) event.getObject();
+        dm.save(selected);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("SAVE", "Изменения сохранены"));
+        RequestContext.getCurrentInstance().update("mainForm:growl");
+    }
+
+    public void onRowCancel() {
     }
 
     public List<Ingrediente> getIngrList() {
@@ -92,6 +109,14 @@ public class CreateDish implements Serializable {
 
     public void setCompList(List<Composition> compList) {
         this.compList = compList;
+    }
+
+    public List<Dish> getDishList() {
+        return dishList;
+    }
+
+    public void setDishList(List<Dish> dishList) {
+        this.dishList = dishList;
     }
     
 }

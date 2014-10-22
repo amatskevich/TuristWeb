@@ -10,32 +10,12 @@
         <p:tabView dynamic="true" cache="true">
             <p:tab title="Создать блюдо" id="createDishTab">
                 <p:growl showDetail="true" id="growlTab1"/>
-                <h:panelGrid columns="2" cellpadding="10">
-                    <p:dataTable id="availableIngr" var="ingr" value="#{createDish.ingrList}">
-                        <f:facet name="header">Список ингредиентов</f:facet>
-                        <p:column style="width:20px">
-                            <h:outputText id="dragIcon" value="INGR"/>
-                            <p:draggable for="dragIcon" revert="true" helper="clone"/>
-                        </p:column>
-                        <p:column headerText="#{textConsts.NUMBER_SIGN}" style="width: 2%">
-                            <h:outputText title="#{createDish.ingrList.indexOf(ingr) + 1}" value="#{createDish.ingrList.indexOf(ingr) + 1}"/>
-                        </p:column>
-                        <p:column headerText="#{textConsts.NAME}">
-                            <h:outputText title="#{ingr.name}" value="#{ingr.name}" />
-                        </p:column>
-                        <p:column headerText="Описание">
-                            <h:outputText title="#{ingr.description}" value="#{ingr.description}" />
-                        </p:column>
-
-                    </p:dataTable>
-                    <p:column>
+                <h:panelGrid columns="2" cellpadding="10" >
+                    <p:column style="width: 300px">
                         <h:panelGrid columns="2" cellpadding="5">
 
                             <p:outputLabel value="Название блюда:"/>
-                            <p:inputText id="nameDish" value="#{createDish.newDish.name}" converter="toUpperCaseConverter" validatorMessage="Количество символов от 2 до 30">
-                                <f:ajax event="blur" render="@this" />
-                                <f:validateLength minimum="2" maximum="30"/>
-                                
+                            <p:inputText id="nameDish" value="#{createDish.newDish.name}" converter="toUpperCaseConverter" >
                             </p:inputText>
 
                             <p:outputLabel value="Описание блюда:" for="descDish"/>
@@ -81,13 +61,77 @@
                             </p:outputPanel>
                         </p:fieldset>
                         <p:commandButton id="createDishButton" value="Создать блюдо" actionListener="#{createDish.createDish()}" 
-                                         update="createDishTab" validateClient="true" ajax="false"/>
+                                         update="createDishTab dishListTable" validateClient="true" ajax="false"/>
                         <p:commandButton value="Очистить" actionListener="#{createDish.clearTab()}" update="createDishTab"/>
                     </p:column>
+                    <p:dataTable id="availableIngr" var="ingr" value="#{createDish.ingrList}" 
+                                 scrollable="true" scrollHeight="300" style="margin-bottom:10px">
+                        <f:facet name="header">Список ингредиентов</f:facet>
+                        <p:column style="width:20px">
+                            <p:graphicImage id="dragIcon" name="images/arrow_move.ico" />
+                            <p:draggable for="dragIcon" revert="true" helper="clone"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.NUMBER_SIGN}" style="width: 2%">
+                            <h:outputText title="#{createDish.ingrList.indexOf(ingr) + 1}" value="#{createDish.ingrList.indexOf(ingr) + 1}"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.NAME}">
+                            <h:outputText title="#{ingr.name}" value="#{ingr.name}" />
+                        </p:column>
+                        <p:column headerText="Описание">
+                            <h:outputText title="#{ingr.description}" value="#{ingr.description}" />
+                        </p:column>
+                    </p:dataTable>
                     <p:droppable for="dropIngrSet" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableIngr" onDrop="handleDrop">
                         <p:ajax listener="#{createDish.onIngredienteDrop}" update="dropIngr availableIngr" />
                     </p:droppable>
                 </h:panelGrid>
+                <p:dataTable id="dishListTable" widgetVar="dishListTable" value="#{createDish.dishList}" var="dish" editable="true" 
+                             scrollable="true" scrollHeight="280" style="margin-bottom:10px">
+
+                    <p:ajax event="rowEdit" listener="#{createDish.onRowEdit}" />
+                    <p:ajax event="rowEditCancel" listener="#{createDish.onRowCancel}"/>
+
+                    <p:column style="width:16px">
+                        <p:rowToggler />
+                    </p:column>
+                    <p:column headerText="#{textConsts.NUMBER_SIGN}" style="width:16px">
+                        <h:outputText title="#{createDish.dishList.indexOf(dish) + 1}" value="#{createDish.dishList.indexOf(dish) + 1}"/>
+                    </p:column>
+                    <p:column headerText="#{textConsts.NAME}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText title="#{dish.name}" value="#{dish.name}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{dish.name}" style="width:100%" converter="toUpperCaseConverter" styleClass="uppercase"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Описание">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText title="#{dish.description}" value="#{dish.description}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{dish.description}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+                    <p:rowExpansion rendered="#{createDish.dishList.size()!=0}">
+                        <p:dataTable id="expFunctions" var="iData" value="#{dish.ingrCountList}" emptyMessage="Данные не найдены.">
+
+
+                            <p:column headerText="Название ингридиента">
+                                <h:outputText value="#{iData.ingr.name}"/>
+                            </p:column>
+                            <p:column headerText="Количество на чел.">
+                                <h:outputText value="#{iData.quantity}"/>
+                            </p:column>
+                            <p:column headerText="Единица измерения">
+                                <h:outputText value="#{iData.ingr.measure}"/>
+                            </p:column>
+                            <p:column headerText="Описание">
+                                <h:outputText value="#{iData.desc}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:rowExpansion>
+
+                </p:dataTable>
             </p:tab>
 
             <p:tab title="Создать ингредиент">
@@ -103,8 +147,40 @@
                     <p:inputTextarea id="descIngr" rows="6" cols="33" value="#{createIngr.newIngr.description}"/>
 
                 </h:panelGrid>
-                <p:commandButton value="Создать игредиент" actionListener="#{createIngr.createIngr()}" update="createIngrGrid"/>
+                <p:commandButton value="Создать игредиент"  actionListener="#{createIngr.createIngr()}" 
+                                 ajax="false" validateClient="false" update="createIngrGrid ingrListTable"/>
                 <p:commandButton value="Очистить" actionListener="#{createIngr.clearTab()}" update="createIngrGrid"/>
+                <p:dataTable id="ingrListTable" widgetVar="ingrListTable" value="#{createIngr.ingredienteList}" var="ingr" editable="true" 
+                             scrollable="true" scrollHeight="300" style="margin-bottom:10px">
+
+                    <p:ajax event="rowEdit" listener="#{createIngr.onRowEdit}" />
+                    <p:ajax event="rowEditCancel" listener="#{createIngr.onRowCancel}"/>
+
+                    <p:column headerText="#{textConsts.NUMBER_SIGN}">
+                        <h:outputText title="#{createIngr.ingredienteList.indexOf(ingr) + 1}" value="#{createIngr.ingredienteList.indexOf(ingr) + 1}"/>
+                    </p:column>
+                    <p:column headerText="#{textConsts.NAME}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText title="#{ingr.name}" value="#{ingr.name}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{ingr.name}" style="width:100%" converter="toUpperCaseConverter" styleClass="uppercase"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="#{textConsts.UNIT}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText title="#{ingr.measure}" value="#{ingr.measure}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{ingr.measure}" style="width:100%" converter="toUpperCaseConverter" styleClass="uppercase"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Описание">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText title="#{ingr.description}" value="#{ingr.description}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{ingr.description}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable>
             </p:tab>
         </p:tabView>
 

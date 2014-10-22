@@ -14,7 +14,7 @@
                     <p:fieldset id="availableDishesField" legend="#{textConsts.LIST_DISHES}">
                         <p:dataTable id="availableDishes" var="dish" value="#{buildMenu.dishList}">
                             <p:column style="width:20px">
-                                <h:outputText id="dragIcon" value="SMT"/>
+                                <p:graphicImage id="dragIcon" name="images/move_1-512.png" width="16"/>
                                 <p:draggable for="dragIcon" revert="true" helper="clone" snap="true" />
                             </p:column>
 
