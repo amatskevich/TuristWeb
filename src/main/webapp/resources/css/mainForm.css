@@ -22,6 +22,21 @@
     border:none;
 }
 
+/*.centerLayout{
+    background-image : url(images/bonfire.gif) ;
+}*/
+
+.thingsPickList {
+    width: 600px;
+    height: 600px;
+    border:1px solid red;
+    position:relative;
+    left:200px;
+    background-image : url(images/bonfire.gif);
+    background-repeat:no-repeat;
+    background-position:bottom right;
+}
+
 input.uppercase {
     text-transform: uppercase;
 }
