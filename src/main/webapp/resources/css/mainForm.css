@@ -22,6 +22,29 @@
     border:none;
 }
 
+.gatherThingsGrid {
+    margin-top:20px;
+    border: 1px solid green;
+    position: absolute;
+    top: 30px;
+    left: 100px;
+}
+
+.col13GatherThingsGrid {
+    width: 200px;
+    height: 100px;
+    
+    border-style: solid; 
+    border-color: green;
+    border-width: 1px;
+}
+
+.col2GatherThingsGrid {
+    border-style: solid; 
+    border-color: green;
+    border-width: 1px;
+}
+
 /*.centerLayout{
     background-image : url(images/bonfire.gif) ;
 }*/

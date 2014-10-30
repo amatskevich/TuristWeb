@@ -7,12 +7,29 @@
     <ui:composition>
         <h3>Список вещей для похода</h3>
 
-        <p:pickList id="thingsPickList" value="#{gatherThings.things}" var="things" itemLabel="#{things}" itemValue="#{things}" 
-                    showCheckbox="true" styleClass="thingsPickList">
-            <p:column>
-                <h:outputText value="#{things}" />
-            </p:column>
-        </p:pickList>
+        <h:panelGrid id="gatherThingsGrid" styleClass="gatherThingsGrid" columns="3"
+                     columnClasses="col13GatherThingsGrid, col2GatherThingsGrid, col13GatherThingsGrid" >
+
+            <p:selectManyCheckbox id="sourceGrid" value="#{gatherThings.selectedSource}" layout="pageDirection" >
+                <f:selectItems value="#{gatherThings.thingsSource}" var="thingS" itemLabel="#{thingS}" itemValue="#{thingS}" />
+            </p:selectManyCheckbox>
+
+            <h:panelGrid id="buttonsGrid" columns="1">
+                <p:commandButton id="addAllBtn" actionListener="#{gatherThings.addAllThings()}" 
+                                 update="gatherThingsGrid" icon="ui-icon-arrowthickstop-1-e" title="add all" />
+                <p:commandButton id="addSelBtn" actionListener="#{gatherThings.addThings()}"
+                                 update="gatherThingsGrid" icon="ui-icon-arrowthick-1-e" title="add selected" />
+                <p:commandButton id="remSelBtn" actionListener="#{gatherThings.removeThings()}"
+                                 update="gatherThingsGrid" icon="ui-icon-arrowthick-1-w" title="remove selected" />
+                <p:commandButton id="remAllBtn" actionListener="#{gatherThings.removeAllThings()}"
+                                 update="gatherThingsGrid" icon="ui-icon-arrowthickstop-1-w" title="remove all" />
+            </h:panelGrid>
+
+            <p:selectManyCheckbox id="targetGrid" value="#{gatherThings.selectedTarget}" layout="pageDirection" style="width: 200px">
+                <f:selectItems value="#{gatherThings.thingsTarget}" var="thingT" itemLabel="#{thingT}" itemValue="#{thingT}" />
+            </p:selectManyCheckbox>
+
+        </h:panelGrid>
 
     </ui:composition>
 </html>
