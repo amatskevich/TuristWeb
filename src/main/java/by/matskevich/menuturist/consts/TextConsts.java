@@ -23,7 +23,7 @@ public class TextConsts implements Serializable {
     public static final String EXSPORT_IN_XLS = "Экспорт в XLS";
     public static final String DAY_OF_CAMPING = "День похода";
     public static final String TIME_TO_EAT = "Время приема";
-    public static final String AMOUNT_PEOPLE = "Колечество едоков: ";
+    public static final String AMOUNT_PEOPLE = "Количество едоков: ";
     public static final String ADD_DAYMENU = "Добавить день";
     public static final String CALCULATE_INGR = "Рассчитать провиант";
     public static final String NECESSARY_INGR = "Необходимые продукты";

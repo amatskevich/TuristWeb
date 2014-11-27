@@ -45,28 +45,6 @@
                         </p:outputPanel>
                     </p:fieldset>
                 </p:column>
-                <p:column rowspan="3">
-
-                    <p:dataTable id="menuTable" value="#{buildMenu.menu}" var="mData" emptyMessage="#{textConsts.NO_RECORDS}">
-                        <f:facet name="header">#{textConsts.MENU}</f:facet>
-                        <p:column headerText="#{textConsts.DAY_OF_CAMPING}">
-                            <h:outputText value="#{mData.numDay}"/>
-                        </p:column>
-                        <p:column headerText="#{textConsts.TIME_TO_EAT}">
-                            <h:outputText value="#{mData.nameItem}"/>
-                        </p:column>
-                        <p:column headerText="#{textConsts.DISH}">
-                            <h:outputText value="#{mData.dish.name}"/>
-                        </p:column>
-                        <f:facet name="footer">
-                            <h:commandLink value="#{textConsts.EXSPORT_IN_XLS}" style="text-decoration: none; float:right;" 
-                                           rendered="#{buildMenu.menu!=null and buildMenu.menu.size()!=0}">  
-                                <p:dataExporter type="xls" target="menuTable" fileName="menu" postProcessor="#{ExportUtils.postProcessXLS}"/>
-                            </h:commandLink> 
-                        </f:facet> 
-                    </p:dataTable> 
-
-                </p:column>
             </p:row>
             <p:row>
                 <p:column>
@@ -117,9 +95,52 @@
                     <p:commandButton value="#{textConsts.ADD_DAYMENU}" actionListener="#{buildMenu.addDayMenu()}" 
                                      update="dropAreaB dropAreaL dropAreaD menuTable" />
                 </p:column>
-                <p:column>
-                    <p:commandButton value="#{textConsts.CALCULATE_INGR}" actionListener="#{buildMenu.calcIngr()}"
-                                     update="mainForm:ingrListTable"/>
+            </p:row>
+            <p:row>
+                <p:column colspan="2">
+                    <p:dataTable id="menuTable" value="#{buildMenu.menu}" var="mData" emptyMessage="#{textConsts.NO_RECORDS}">
+                        <f:facet name="header">#{textConsts.MENU}</f:facet>
+                        <p:column headerText="#{textConsts.DAY_OF_CAMPING}" style="width: 20%;">
+                            <h:outputText value="#{mData.numDay}"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.TIME_TO_EAT}" style="width: 20%;">
+                            <h:outputText value="#{mData.nameItem}"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.DISH}">
+                            <h:outputText value="#{mData.dish.name}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton value="#{textConsts.CALCULATE_INGR}" actionListener="#{buildMenu.calcIngr()}"
+                                             update=":mainForm:ingrListTable" rendered="#{buildMenu.menu.size() != 0}"
+                                             styleClass="footerBtn"/>
+                            <h:commandLink value="#{textConsts.EXSPORT_IN_XLS}" styleClass="footerXLS"
+                                           rendered="#{buildMenu.menu!=null and buildMenu.menu.size()!=0}">  
+                                <p:dataExporter type="xls" target="menuTable" fileName="menu" postProcessor="#{ExportUtils.postProcessXLS}"/>
+                            </h:commandLink> 
+                        </f:facet> 
+                    </p:dataTable> 
+                </p:column>
+            </p:row>
+            <p:row>
+                <p:column colspan="2">
+                    <p:dataTable id="ingrListTable" var="ingr" value="#{buildMenu.products}" emptyMessage="#{textConsts.NO_RECORDS}">
+                        <f:facet name="header">#{textConsts.NECESSARY_INGR}</f:facet>
+                        <p:column headerText="#{textConsts.NAME}">
+                            <h:outputText value="#{ingr.key.name}"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.AMOUNT}">
+                            <h:outputText value="#{ingr.value}"/>
+                        </p:column>
+                        <p:column headerText="#{textConsts.UNIT}">
+                            <h:outputText value="#{ingr.key.measure}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <h:commandLink value="#{textConsts.EXSPORT_IN_XLS}" styleClass="footerXLS" 
+                                           rendered="#{buildMenu.products!=null and buildMenu.products.size()!=0}">  
+                                <p:dataExporter type="xls" target="ingrListTable" fileName="products" postProcessor="#{ExportUtils.postProcessXLS}"/>
+                            </h:commandLink> 
+                        </f:facet> 
+                    </p:dataTable>
                 </p:column>
             </p:row>
 
@@ -135,24 +156,7 @@
             <p:ajax listener="#{buildMenu.onDinnerDishDrop}" update="dropAreaD availableDishes" />
         </p:droppable>
 
-        <p:dataTable id="ingrListTable" var="ingr" value="#{buildMenu.products}" emptyMessage="#{textConsts.NO_RECORDS}">
-            <f:facet name="header">#{textConsts.NECESSARY_INGR}</f:facet>
-            <p:column headerText="#{textConsts.NAME}">
-                <h:outputText value="#{ingr.key.name}"/>
-            </p:column>
-            <p:column headerText="#{textConsts.AMOUNT}">
-                <h:outputText value="#{ingr.value}"/>
-            </p:column>
-            <p:column headerText="#{textConsts.UNIT}">
-                <h:outputText value="#{ingr.key.measure}"/>
-            </p:column>
-            <f:facet name="footer">
-                <h:commandLink value="#{textConsts.EXSPORT_IN_XLS}" style="text-decoration: none; float:right;" 
-                               rendered="#{buildMenu.products!=null and buildMenu.products.size()!=0}">  
-                    <p:dataExporter type="xls" target="ingrListTable" fileName="products" postProcessor="#{ExportUtils.postProcessXLS}"/>
-                </h:commandLink> 
-            </f:facet> 
-        </p:dataTable>
+
 
     </ui:composition>
 </html>
